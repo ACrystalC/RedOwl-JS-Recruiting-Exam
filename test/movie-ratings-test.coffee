@@ -1,3 +1,4 @@
+_ = require 'underscore'
 assert = require 'assert'
 
 MovieRatingsResource = require '../app/movie-ratings'
@@ -14,36 +15,45 @@ describe 'MovieRatingsResource', ->
   describe '#getAllMovieRatings()', ->
 
     it 'should return the correct ratings for all movies', ->
-      throw new Error 'Not implemented'
+      bladeRunner = movieRatings.getAllMovieRatings()['Bladerunner']
+      theEmpire = movieRatings.getAllMovieRatings()['The Empire Strikes Back']
+      assert.equal _.difference(bladeRunner, [1, 5]).length, 0
+      assert.equal _.difference(theEmpire, [1, 1, 2, 3, 5]).length, 0
+
 
   describe '#getMovieRatings()', ->
 
     it 'should return the correct movie ratings for the requested movie', ->
-      throw new Error 'Not implemented'
+      bladeRunner = movieRatings.getMovieRatings('Bladerunner')
+      assert.equal _.difference(bladeRunner, [1, 5]).length, 0
 
     it 'should throw an error if the requested movie does not exist in the repo', ->
-      throw new Error 'Not implemented'
+      assert.throws (-> movieRatings.getMovieRatings 'Leon: The Professional'), /Movie does not exist in repository/
 
   describe '#putMovieRatings()', ->
 
     it 'should put a new movie with ratings into the repo and return the ratings', ->
-      throw new Error 'Not implemented'
+      leon = movieRatings.putMovieRatings('Leon: The Professional', [3, 4, 4, 5])
+      assert.equal _.difference(leon, [3, 4, 4, 5]).length, 0
 
     it 'should overwrite the ratings of an existing movie in the repo and return the new ratings', ->
-      throw new Error 'Not implemented'
+      bladeRunner = movieRatings.putMovieRatings('Bladerunner', [3, 4, 4, 5])
+      assert.equal _.difference(bladeRunner, [3, 4, 4, 5]).length, 0
 
   describe '#postMovieRating()', ->
 
     it 'should put a new movie with rating into the repo if it does not already exist and return the rating', ->
-      throw new Error 'Not implemented'
+      leon = movieRatings.postMovieRating('Leon: The Professional', 5)
+      assert.equal _.difference(leon, [3, 4, 4, 5, 5]).length, 0
 
     it 'should add a new rating to an existing movie in the repo and return the ratings', ->
-      throw new Error 'Not implemented'
+      bladeRunner = movieRatings.postMovieRating('Bladerunner', 4)
+      assert.equal _.difference(bladeRunner, [1, 5, 4]).length, 0
 
   describe '#deleteMovieRatings()', ->
 
     it 'should delete a movie from the ratings repo', ->
-      throw new Error 'Not implemented'
+      assert.equal movieRatings.deleteMovieRatings('Bladerunner'), true
 
     it 'should throw an error when attempting to delete a movie that does not exist', ->
-      throw new Error 'Not implemented'
+      assert.throws (-> movieRatings.deleteMovieRatings 'Leon: The Professional'), /Movie does not exist in repository/
