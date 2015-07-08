@@ -33,11 +33,11 @@ app.get '/api/movieratings/:id', (request, response) ->
 
 app.put '/api/movieratings/:id', (request, response) ->
   console.log "Putting movie named #{request.params.id} with ratings [#{request.body.ratings}] into repo."
-  response.json movieRatings.putMovieRatings request.params.id, request.body.ratings
+  response.json movieRatings.putMovieRatings request.params.id, request.body.ratings.map(Number)
 
 app.post '/api/movieratings/:id', (request, response) ->
   console.log "Adding rating of #{request.body.rating} to movie named #{request.params.id} in repo."
-  response.json movieRatings.postMovieRating request.params.id, request.body.rating
+  response.json movieRatings.postMovieRating request.params.id, Number(request.body.rating)
 
 app.delete '/api/movieratings/:id', (request, response) ->
   console.log "Deleting movie #{request.params.id} from repo."
